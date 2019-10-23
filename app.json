@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "HomeSysApp",
-    "slug": "HomeSysApp",
+    "name": "HomeSYS",
+    "slug": "HomeSYS",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
-      "ios",
       "android",
       "web"
     ],

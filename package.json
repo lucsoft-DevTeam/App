@@ -8,15 +8,22 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "^35.0.0",
-    "react": "16.8.3",
-    "react-dom": "16.8.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
-    "react-native-elements": "^1.2.6",
-    "react-native-web": "^0.11.7"
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "@types/react-dom": "16.9.2",
+    "@unimodules/react-native-adapter": "4.0.0",
+    "expo": "35.0.0",
+    "react": "16.9.0",
+    "react-dom": "16.11.0",
+    "react-native": "0.59.8",
+    "react-native-web": "^0.11.7",
+    "react-shadow": "^17.1.3"
   },
   "devDependencies": {
-    "babel-preset-expo": "^7.1.0"
+    "@types/react": "16.8.23",
+    "@types/react-native": "0.57.65",
+    "babel-preset-expo": "7.1.0",
+    "typescript": "3.6.4"
   },
   "private": true
 }
