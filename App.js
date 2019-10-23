@@ -1,19 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { Header } from 'react-native-elements'
+import { Text, View, Button } from 'react-native'
 
-export default function App() {
+export default function App () {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <View>
+      <Header
+        centerComponent={{
+          text: 'HomeSYS',
+          style: { color: '#fff', fontWeight: 'bold', fontSize: 20 }
+        }}
+        leftComponent={<Button title='Menu'/>}
+      />
+      <Text>Lololo</Text>
     </View>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
