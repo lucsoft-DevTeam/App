@@ -21,7 +21,7 @@
         "@lucsoft/webgen": "^1.4.2"
     },
     "devDependencies": {
-        "@lucsoft/webgen": "https://github.com/lucsoft/webgen",
+        "webgen": "https://github.com/lucsoft/webgen",
         "@types/react": "^16.9.11",
         "@types/react-native": "^0.60.22",
         "babel-preset-expo": "7.1.0",
