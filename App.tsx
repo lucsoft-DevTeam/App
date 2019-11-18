@@ -1,10 +1,13 @@
 
-import { StyleSheet, Text, View } from 'react-native';
-import { HomeSYS } from './src/modules/app';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default class App extends React.Component {
-  render() {
-    return <body><HomeSYS></HomeSYS></body>;
-  }
+import { HomeSYS } from './src/modules/app';
+
+export default class App extends React.Component
+{
+    render()
+    {
+        return <HomeSYS></HomeSYS>;
+    }
 }
