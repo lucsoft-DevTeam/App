@@ -16,6 +16,7 @@ export class HomeSYS extends React.Component
     {
         return (
             <article id="page"></article>
+
         )
     }
 }
@@ -27,7 +28,7 @@ export const getModule = (ModuleType: any) =>
 web.ready = () =>
 {
     page = document.getElementById('page');
-    page.style.maxWidth = "40rem";
+    page.style.maxWidth = "48rem";
     page.style.left = "50%";
     page.style.transform = "translate(-50%, 0)";
     page.style.position = "relative";
