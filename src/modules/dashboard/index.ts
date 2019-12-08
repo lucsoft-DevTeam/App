@@ -60,26 +60,30 @@ export class DashboardModule extends HomeSYSModule
     {
     }
     cards: ElementResponse;
+    actionList: [] = [];
+    data?: DataConnect;
     onSync(type: string, data: any)
     {
-        console.log(type, data);
         if (type == "vdevice")
         {
             var element = Object.values(
                 this.cards.modify.element.querySelectorAll('card'))
                 .find(x => x.id == data.address);
-            console.log('test', data);
             if (data.content == "on" || data.content == "unlock")
                 element.classList.add('active');
             else
                 element.classList.remove('active');
 
             element.querySelector('.value').innerHTML = translateENG(data.content);
+        } else if (type == "clmpChat")
+        {
+            console.log(data);
         }
     }
     openDashboard(data: DataConnect)
     {
         web.elements.clear();
+        this.data = data;
         data.onSync = (type, data) => this.onSync(type, data);
         var trends = web.elements.add(page).pageTitle({
             text: `HomeSYS – ${data.profile.modules.homesys.version}`
@@ -95,13 +99,12 @@ export class DashboardModule extends HomeSYSModule
                 title: x.name,
                 id: x.address,
                 value: translateENG(x.state),
-                toggleElement: (toggle, title, state, element, id) =>
+                onClick: (toggle, state, title, element, id) =>
                 {
-                    (data as any).triggerCommand('vdevices', { address: id, state: x.allowed.find(w => w != state.innerText.toLowerCase().replace('locked', 'lock')) });
+                    data.triggerCommand('vdevices', { address: id, state: x.allowed[ state ? 1 : 0 ] });
                 }
             } as cardbutton))
         });
-        (window as any).data = data;
         this.cards.next.cards({
             small: true,
             columns: "3",
@@ -154,17 +157,158 @@ export class DashboardModule extends HomeSYSModule
             list: [
                 {
                     title: "HomeSYS Settings",
+                    value: "Global",
                     id: "homsys",
                     onClick: () =>
                     {
                         this.openSettings();
                     }
+                },
+                {
+                    title: "FightOfLife",
+                    value: "Proof of Concept",
+                    id: "fol",
+                    onClick: () =>
+                    {
+                        this.openGame();
+                    }
                 }
             ]
-        })
+        }).modify.element.style.marginBottom = "5rem";
+
+    }
+
+    private openGame()
+    {
+        const game = web.elements.layout("fixedWindow").element;
+        game.element.onclick = (ev: any) =>
+        {
+            if (ev.path[ 0 ].nodeName == "ARTICLE")
+            {
+                // game.element.remove();
+                // document.body.style.overflow = "unset";
+            }
+        }
+        var login = web.elements.add(game.element).login({
+            email: "Gabe Newell",
+            button: "Join eu01",
+            text: "What's your name?",
+            login: (_, email) =>
+            {
+                console.log(this.data);
+                this.data.triggerCommand("registerCLMP", { username: email });
+                login.modify.element.remove();
+                this.gameLogic(login);
+            }
+        });
+
+    }
+
+    private gameLogic(windowElement: ElementResponse)
+    {
+        document.body.style.overflow = "hidden";
+        var gameBlock = document.createElement('div');
+        var canvas = document.createElement('canvas') as HTMLCanvasElement;
+        var game = canvas.getContext("2d");
+        game.fillStyle = "#FFFFFF";
+        game.fillRect(0, 0, 3000, 2000);
+        game.fillStyle = "#000000";
+        for (let index = 0; index < 40; index++)
+        {
+            game.fillRect(10 + index, 10 + index, 1, 1);
+        }
+        canvas.style.imageRendering = "pixelated";
+        canvas.style.height = "2000px";
+        canvas.style.width = "3000px";
+
+        gameBlock.append(canvas);
+        gameBlock.style.overflow = "auto";
+        gameBlock.style.overflowX = "hidden";
+        gameBlock.style.height = "20rem";
+        gameBlock.style.width = "35rem";
+        gameBlock.style.margin = "0 auto";
+        gameBlock.scrollTop = 1;
+        var currentScale = 1.2;
+        gameBlock.style.position = "relative";
+        canvas.style.position = "relative";
+
+        canvas.style.transform = `scale(${currentScale})`;
+        gameBlock.addEventListener('scroll', (e) =>
+        {
+            if (gameBlock.scrollTop == 0)
+            {
+                currentScale += 0.1;
+                gameBlock.scrollTop = 1;
+            } else if (gameBlock.scrollTop > 1)
+            {
+                if (currentScale > 0.11)
+                    currentScale -= 0.1;
+                gameBlock.scrollTop = 1;
+            }
+            this.changeTransfrom(canvas, currentScale)
+        });
+
+        var isDown = false;
+        var offset = [ 0, 0 ];
+        var mousePosition;
+        canvas.addEventListener('mousedown', (e) =>
+        {
+            isDown = true;
+            offset = [
+                canvas.offsetLeft - e.clientX,
+                canvas.offsetTop - e.clientY
+            ];
+        }, true);
+
+        document.addEventListener('mouseup', () =>
+        {
+            isDown = false;
+        }, true);
+
+        document.addEventListener('mousemove', (event) =>
+        {
+            event.preventDefault();
+            if (isDown)
+            {
+                mousePosition = {
+
+                    x: event.clientX,
+                    y: event.clientY
+
+                };
+
+                canvas.style.left = (mousePosition.x + offset[ 0 ]) + 'px';
+                canvas.style.top = (mousePosition.y + offset[ 1 ]) + 'px';
+
+            }
+        }, true);
+        windowElement.next.window({
+            title: "FightOfLife playling on eu01.hmsys.de",
+            content: gameBlock,
+            maxWidth: "40rem"
+        });
+    }
+
+    private changeTransfrom(canvas: HTMLCanvasElement, currentScale: number, )
+    {
+        canvas.style.transform = `scale(${currentScale})`;
     }
     private openSettings()
     {
-
+        const settings = web.elements.layout("fixedWindow").element;
+        settings.element.onclick = (ev: any) =>
+        {
+            if (ev.path[ 0 ].nodeName == "ARTICLE")
+            {
+                settings.element.remove();
+            }
+        }
+        var test = document.createElement('button');
+        test.onclick = () => web.elements.layout("fixedWindow", true);
+        test.innerHTML = "Close";
+        web.elements.add(settings.element).window({
+            title: "Settings",
+            content: [ `NEEE`, test ],
+        });
     }
 }

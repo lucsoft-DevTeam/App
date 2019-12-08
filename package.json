@@ -8,7 +8,7 @@
         "eject": "expo eject"
     },
     "dependencies": {
-        "@lucsoft/webgen": "^1.6.2",
+        "@lucsoft/webgen": "^1.6.4",
         "@unimodules/react-native-adapter": "4.0.0",
         "expo": "^35.0.1",
         "react": "^16.12.0",
