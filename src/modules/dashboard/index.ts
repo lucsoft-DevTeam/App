@@ -154,8 +154,8 @@ export class DashboardModule extends HomeSYSModule
             list: [
                 {
                     title: "HomeSYS Settings",
-
-                    toggleElement: () =>
+                    id: "homsys",
+                    onClick: () =>
                     {
                         this.openSettings();
                     }

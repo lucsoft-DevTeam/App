@@ -1,4 +1,4 @@
-import { DataConnect, ProtocolDC } from '@lucsoft/webgen';
+import { DataConnect, IDTokenAuth, ProtocolDC } from '@lucsoft/webgen';
 
 import { page, web } from '../app';
 import { HomeSYSModule } from '../app/modules';
@@ -16,7 +16,10 @@ export class LoginModule extends HomeSYSModule
     {
         if (localStorage.auth)
         {
-            this.data.login
+            this.data.url = "wss://eu01.hmsys.de";
+
+            this.data.onLogin = () => this.onLogin(this.data);
+            this.data.relogin(JSON.parse(localStorage.auth) as IDTokenAuth);
             return;
         }
         web.elements.clear();

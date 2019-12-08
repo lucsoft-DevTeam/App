@@ -43,6 +43,7 @@ web.ready = () =>
     login.startLogin();
     login.onLogin = () =>
     {
+        localStorage.auth = JSON.stringify(login.data.profile.auth);
         dasboard.openDashboard(login.data);
     };
 
