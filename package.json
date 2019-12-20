@@ -8,18 +8,18 @@
         "eject": "expo eject"
     },
     "dependencies": {
-        "@lucsoft/webgen": "^1.6.5",
+        "@lucsoft/webgen": "^1.6.11",
         "@unimodules/react-native-adapter": "^5.0.0",
-        "expo": "^36.0.0",
+        "expo": "^36.0.2",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
         "react-native": "^0.61.5",
         "react-native-web": "^0.11.7"
     },
     "devDependencies": {
-        "@types/react": "^16.9.16",
+        "@types/react": "^16.9.17",
         "babel-preset-expo": "^8.0.0",
-        "typescript": "^3.7.3",
+        "typescript": "^3.7.4",
         "webgen": "https://github.com/lucsoft/webgen"
     },
     "private": true
