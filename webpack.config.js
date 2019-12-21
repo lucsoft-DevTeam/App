@@ -1,10 +1,14 @@
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const modulePath = './src/modules/dashboard/';
+
 module.exports = (env = "development") => ({
     mode: env,
     entry: {
-        homesysapp: './src/modules/app/index.ts'
+        homesysapp: './src/modules/app/index.ts',
+        "module/FightOfLife": `${modulePath}FightOfLife/index.ts`,
+        "module/homeSYSSettings": `${modulePath}homeSYSSettings/index.ts`
     },
 
     module: {
