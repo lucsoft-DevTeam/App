@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { DataConnect } from '@lucsoft/webgen';
 import { ElementResponse } from '@lucsoft/webgen/bin/classes/ElementsResponse';
 
@@ -66,9 +64,9 @@ export class DashboardModule extends HomeSYSModule
     {
         if (type == "vdevice")
         {
-            var element = Object.values(
-                this.cards.modify.element.querySelectorAll('card'))
-                .find(x => x.id == data.address);
+
+            var element = this.cards.modify.element.querySelector(`card#${data.address}`);
+
             if (data.content == "on" || data.content == "unlock")
                 element.classList.add('active');
             else
@@ -84,7 +82,7 @@ export class DashboardModule extends HomeSYSModule
     {
         web.elements.clear();
         this.data = data;
-        data.onSync = (type, data) => this.onSync(type, data);
+        data.onSync = (type: string, data: string | object) => this.onSync(type, data);
         var trends = web.elements.add(page).pageTitle({
             text: `HomeSYS – ${data.profile.modules.homesys.version}`
         }).next.note({

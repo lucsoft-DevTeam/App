@@ -1,26 +1,22 @@
 {
-    "main": "node_modules/expo/AppEntry.js",
     "scripts": {
-        "start": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
-        "web": "expo start --web",
-        "eject": "expo eject"
+        "start": "webpack-dev-server",
+        "build": "webpack"
     },
     "dependencies": {
-        "@lucsoft/webgen": "^1.6.11",
-        "@unimodules/react-native-adapter": "^5.0.0",
-        "expo": "^36.0.2",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0",
-        "react-native": "^0.61.5",
-        "react-native-web": "^0.11.7"
+        "@lucsoft/webgen": "^1.6.12",
+        "html-webpack-plugin": "^3.2.0",
+        "ts-loader": "^6.2.1"
     },
     "devDependencies": {
-        "@types/react": "^16.9.17",
-        "babel-preset-expo": "^8.0.0",
         "typescript": "^3.7.4",
-        "webgen": "https://github.com/lucsoft/webgen"
+        "webpack": "^4.41.4",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.10.1",
+        "css-loader": "^3.4.0",
+        "fork-ts-checker-webpack-plugin": "^4.0.0-beta.4",
+        "html-loader": "^0.5.5",
+        "style-loader": "^1.1.1"
     },
     "private": true
 }
