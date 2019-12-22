@@ -1,12 +1,38 @@
 import { DataConnect, ElementResponse, WebGen } from '@lucsoft/webgen';
 
-import { HomeSYSAppModule } from '../modules';
+import { HomeSYSAppModule } from '../../../modules';
 
 export class FightOfLife implements HomeSYSAppModule
 {
+    public title = "FightOfLife";
+    public subtitle = "Proof Of Concept";
+    public id = "FightOfLife";
+    private web: WebGen;
+    private elements: ElementResponse;
+    private data: DataConnect;
+
     constructor(web: WebGen, elements: ElementResponse, data: DataConnect)
     {
-        const game = web.elements.layout("fixedWindow").element;
+        this.web = web;
+        this.elements = elements;
+        this.data = data;
+    }
+
+    public renderModuleInStats(): void
+    {
+    }
+
+    public renderModuleConnectedSystems(): void
+    {
+    }
+
+    public renderModuleAfterAll(): void
+    {
+    }
+
+    public buttonClicked(): void
+    {
+        const game = this.web.elements.layout("fixedWindow").element;
         game.element.onclick = (ev: any) =>
         {
             if (ev.path[ 0 ].nodeName == "ARTICLE")
@@ -15,19 +41,26 @@ export class FightOfLife implements HomeSYSAppModule
                 // document.body.style.overflow = "unset";
             }
         }
-        var login = web.elements.add(game.element).login({
+        var login = this.web.elements.add(game.element).login({
             email: "Gabe Newell",
             button: "Join eu01",
             text: "What's your name?",
             login: (_, email) =>
             {
-                console.log(data);
-                data.triggerCommand("registerCLMP", { username: email });
+                console.log(this.data);
+                this.data.triggerCommand("registerCLMP", { username: email });
                 login.modify.element.remove();
                 this.gameLogic(login);
             }
         });
+
     }
+
+    public emitEvent(type: string, data: any): void
+    {
+
+    }
+
     private gameLogic(windowElement: ElementResponse)
     {
         document.body.style.overflow = "hidden";

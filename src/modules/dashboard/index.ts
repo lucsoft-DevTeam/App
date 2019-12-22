@@ -1,9 +1,9 @@
 import { DataConnect, ElementResponse } from '@lucsoft/webgen';
 
+import { moduleList } from '../../moduleList';
+import { HomeSYSAppModule } from '../../modules';
 import { page, web } from '../app';
 import { HomeSYSModule } from '../app/modules';
-import { FightOfLife } from './FightOfLife';
-import { HomeSYSAppModule } from './modules';
 
 class cardbutton
 {
@@ -63,47 +63,44 @@ export class DashboardModule extends HomeSYSModule
     data?: DataConnect;
     onSync(type: string, data: any)
     {
-        if (type == "vdevice")
-        {
-
-            var element = this.cards.modify.element.querySelector(`card#${data.address}`);
-
-            if (data.content == "on" || data.content == "unlock")
-                element.classList.add('active');
-            else
-                element.classList.remove('active');
-
-            element.querySelector('.value').innerHTML = translateENG(data.content);
-        } else if (type == "clmpChat")
-        {
-            console.log(data);
-        }
+        console.log("DATASYNC", type, data);
+        this.loadedModules.forEach((thisModule) => thisModule.emitEvent(type, data));
     }
-    openDashboard(data: DataConnect)
+    loadedModules: HomeSYSAppModule[] = [];
+    private async loadModules()
+    {
+        const hmsys = this.data.profile.modules.hmsys;
+        if (this.data.profile.modules.hmsys == undefined)
+            return;
+
+        for (const mod of moduleList)
+        {
+            if (hmsys.loadedModules.includes(mod.id))
+            {
+                const loadedModule: typeof HomeSYSAppModule = (await this.loadModule(mod.id))[ mod.id ];
+                const thisModule = new loadedModule(web, this.cards, this.data);
+                console.log(`Loaded ${thisModule.title}`);
+                this.loadedModules.push(thisModule);
+            }
+        }
+
+    }
+
+    async openDashboard(data: DataConnect)
     {
         web.elements.clear();
         this.data = data;
+
+        await this.loadModules();
         data.onSync = (type: string, data: string | object) => this.onSync(type, data);
-        var trends = web.elements.add(page).pageTitle({
+        this.cards = web.elements.add(page).pageTitle({
             text: `HomeSYS – ${data.profile.modules.homesys.version}`
         }).next.note({
             text: "Welcome back! Here are youre Actions",
             type: "fire"
         });
-        var devices = data.profile.modules.vdevice as { name: string, state: string, allowed: string[], address: string }[];
 
-        this.cards = trends.next.cardButtons({
-            list: devices.map(x => ({
-                active: x.state == "on" || x.state == "unlock",
-                title: x.name,
-                id: x.address,
-                value: translateENG(x.state),
-                onClick: (toggle, state, title, element, id) =>
-                {
-                    data.triggerCommand('vdevices', { address: id, state: x.allowed[ state ? 1 : 0 ] });
-                }
-            } as cardbutton))
-        });
+        this.loadedModules.forEach((thisModule) => thisModule.renderModuleInStats());
         this.cards.next.cards({
             small: true,
             columns: "3",
@@ -137,36 +134,15 @@ export class DashboardModule extends HomeSYSModule
             document.querySelector('#hmsysrunningsince').querySelector('.title').innerHTML = timeAgo(data.profile.modules.homesys.runningSince);
         }, 1000);
         const list = [];
-        const hmsys = data.profile.modules.hmsys;
-        if (data.profile.modules.hmsys == undefined)
-            return;
 
-        var moduleList = [
-            {
-                title: "Global Settings",
-                value: " ",
-                id: "homeSYSSettings"
-            },
-            {
-                title: "FightOfLife",
-                subtitle: "Proof of Concept Game",
-                id: "FightOfLife"
-            }
-        ];
-
-        for (const mod of moduleList)
+        for (const mod of this.loadedModules)
         {
-            if (hmsys.loadedModules.includes(mod.id))
-                list.push({
-                    title: mod.title,
-                    value: mod.subtitle,
-                    id: mod.id,
-                    onClick: async () =>
-                    {
-                        const loadedModule: typeof HomeSYSAppModule = (await this.loadModule(mod.id))[ mod.id ];
-                        new loadedModule(web, this.cards, data);
-                    }
-                })
+            list.push({
+                title: mod.title,
+                value: mod.subtitle,
+                id: mod.id,
+                onClick: async () => mod.buttonClicked()
+            })
         }
 
         this.cards.next.cardButtons({

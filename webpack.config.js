@@ -8,7 +8,8 @@ module.exports = (env = "development") => ({
     entry: {
         homesysapp: './src/modules/app/index.ts',
         "module/FightOfLife": `${modulePath}FightOfLife/index.ts`,
-        "module/homeSYSSettings": `${modulePath}homeSYSSettings/index.ts`
+        "module/homeSYSSettings": `${modulePath}homeSYSSettings/index.ts`,
+        "module/homeSYSDeviceControl": `${modulePath}homeSYSDeviceControl/index.ts`
     },
 
     module: {
