@@ -1,10 +1,15 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "moduleResolution": "node",
+        "module": "esnext",
+        "importHelpers": true,
         "target": "es5",
-        "sourceMap": true
+        "sourceMap": true,
+        "allowJs": true,
+        "noImplicitAny": true
     },
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "webpack.config.js"
     ]
 }

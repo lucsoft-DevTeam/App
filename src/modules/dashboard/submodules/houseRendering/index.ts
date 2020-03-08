@@ -1,14 +1,23 @@
 import './style.css';
 
-import { DataConnect, ElementResponse } from '@lucsoft/webgen';
+import { actionTypes, HomeSYSAppModule } from '../../../../modules';
 
-export class HouseRendering
+export default class houseRendering extends HomeSYSAppModule
 {
-    constructor(web: ElementResponse, data: DataConnect)
+    moduleName = "House Rendering";
+    public emitEvent(type: actionTypes): void
     {
-        if (data.profile.modules.homes.length == 0)
+        switch (type)
         {
-            web.next.cards({
+            case "connectedSystems":
+                return this.renderConnectedSystems();
+        }
+    }
+    renderConnectedSystems(): void
+    {
+        if (this.data.profile.modules.homes.length == 0)
+        {
+            this.elements.cards({
                 small: false,
                 columns: "1",
                 hidden: false,
@@ -22,8 +31,8 @@ export class HouseRendering
             })
             return;
         }
-        const home = data.profile.modules.homes[ 0 ];
-        web.next.window({
+        const home = this.data.profile.modules.homes[ 0 ];
+        this.elements.window({
             content: `
             <span class="houseTag">${home.houseType == "private" ? "Private" : home.houseType}</span>
             <div class="houseRending">
@@ -38,5 +47,12 @@ export class HouseRendering
             </div>
                 `
         })
+    }
+
+    renderTags(homes: any): string
+    {
+        return `<span class="tagsList">
+            <span class="tag">${this.web.functions.timeAgo(homes.connectedTimestamp)}</span>
+        </span>`;
     }
 }

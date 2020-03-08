@@ -1,25 +1,24 @@
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
 
-const modulePath = './src/modules/dashboard/';
+module.exports = {
+    entry: "./src/modules/app/index.ts",
+    mode: "development",
+    output: {
+        path: path.join(__dirname, "dist3"),
+        filename: "[name].bundle.js",
+        chunkFilename: "[name].chunk.js"
+    },
 
-module.exports = (env = "development") => ({
-    mode: env,
-    entry: {
-        homesysapp: './src/modules/app/index.ts',
-        "module/FightOfLife": `${modulePath}FightOfLife/index.ts`,
-        "module/homeSYSSettings": `${modulePath}homeSYSSettings/index.ts`,
-        "module/homeSYSDeviceControl": `${modulePath}homeSYSDeviceControl/index.ts`
+    resolve: {
+        extensions: [ ".js", ".ts" ]
     },
 
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                loader: "ts-loader",
-                options: {
-                    transpileOnly: true
-                }
+                test: /\.ts$/,
+                include: path.join(__dirname, "src"),
+                loader: "ts-loader"
             },
             {
                 test: /\.css$/i,
@@ -27,17 +26,8 @@ module.exports = (env = "development") => ({
             }
         ]
     },
-    resolve: {
-        extensions: [ ".ts", ".js", ".json", ".html" ]
-    },
-    plugins: [
-        new ForkTsCheckerWebpackPlugin({ async: env === "production" }),
-        new HtmlWebpackPlugin({
-            inject: false,
-            hash: true,
-            favicon: './res/favicon.ico',
-            template: './src/index.html',
-            filename: 'index.html'
-        }),
-    ]
-});
+
+    devServer: {
+        contentBase: "./dist"
+    }
+};

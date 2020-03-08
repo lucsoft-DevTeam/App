@@ -1,4 +1,5 @@
-import { DataConnect, ElementResponse, WebGen } from '@lucsoft/webgen';
+import type { DataConnect, WebGen } from '@lucsoft/webgen';
+import type { WebGenElements } from '@lucsoft/webgen/bin/classes/WebGenElements';
 
 export interface HomeSYSInterface
 {
@@ -8,38 +9,23 @@ export interface HomeSYSInterface
     id: string;
     onClick?: (toggleState: (state: string) => void, currentState: boolean, title: HTMLSpanElement, element: HTMLElement, id: string) => void;
 }
+export type actionTypes = "afterLoading" | "beginHTML" | "statistics" | "connectedSystems" | "connectedSystemsFeature" | "extraFeatures" | "afterComplete" | "moduleCommuncation";
 
 export class HomeSYSAppModule
 {
-    public title = "";
-    public subtitle = "";
-    public id = "";
-
-    constructor(web: WebGen, elements: ElementResponse, data: DataConnect)
+    protected web: WebGen;
+    protected elements: WebGenElements;
+    protected data: DataConnect;
+    public moduleName: string = "Unnamed Module";
+    constructor(web: WebGen, elements: WebGenElements, data: DataConnect)
     {
-
+        this.web = web;
+        this.elements = elements;
+        this.data = data;
     }
 
-    public renderModuleInStats()
+    public emitEvent(type: actionTypes, data?: any)
     {
-
-    }
-
-    public renderModuleConnectedSystems()
-    {
-    }
-
-    public renderModuleAfterAll()
-    {
-    }
-
-    public buttonClicked()
-    {
-
-    }
-
-    public emitEvent(type: string, data: any)
-    {
-
+        console.error('Loaded an Empty Module...');
     }
 }
