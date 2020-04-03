@@ -1,18 +1,17 @@
 import { WebGen } from '@lucsoft/webgen';
-
-import { DashboardModule } from '../dashboard';
 import { LoginModule } from '../login';
-import { modules } from './modulelist';
 import { HomeSYSModule } from './modules';
+//@ts-ignore
+import mcmodpack from '../../../res/MCModpack.svg';
 
 export const web = new WebGen();
 
 export let page: HTMLElement;
-export const getModule = (ModuleType: any) =>
-{
-    return modules.find(x => x instanceof ModuleType);
-};
-web.ready = () =>
+let loadedModules: HomeSYSModule[] = []; 
+
+const runAction = (list: HomeSYSModule[], action: (module: HomeSYSModule) => void) => list.forEach(action);
+
+web.ready = async () =>
 {
     page = document.getElementById('page');
     page.style.maxWidth = "48rem";
@@ -20,20 +19,41 @@ web.ready = () =>
     page.style.transform = "translate(-50%, 0)";
     page.style.position = "relative";
     page.style.marginTop = "5rem";
-    modules.forEach((x: HomeSYSModule) =>
-    {
-        x.onWebGenLoaded(page);
-    })
+    web.elements.add(page).pageTitle({ text: 'Select Start'}).next.cardButtons({
+        small: true,
+        columns: "1",
+        list: [
+            {
+                id: 'mcmodpack',
+                title: 'MCModpack',
+                icon: mcmodpack,
+                onClick: async () => {
+                    new (await import('../modpack')).ModpackTestingModule(web,page);
+                }
+            },
+            {
+                id: 'login',
+                title: 'Dashboard',
+                value: 'Disabled for now',
+                onClick: async () => {
+                    return;
+                    // var login = new LoginModule(web,page);
+                    // new (await import('../dashboard')).DashboardModule(web,page);
+                    // login.startLogin();
+                    // login.onLogin = async () =>
+                    // {
+                    //     localStorage.auth = JSON.stringify(login.data.profile.auth);
 
-    var login = getModule(LoginModule) as LoginModule;
-    var dasboard = getModule(DashboardModule) as DashboardModule;
-    login.startLogin();
-    login.onLogin = () =>
-    {
-        localStorage.auth = JSON.stringify(login.data.profile.auth);
-        dasboard.openDashboard(login.data);
-    };
+                    //     runAction(loadedModules, (x) => x.afterLogin(login.data));
+                    //     console.log(login.data)
+                    
+                    // };
+                }
+            },
+            
+        ]
+    })  
 
 };
 
-document.addEventListener("DOMContentLoaded", () => web.enable(web.supported.blur));
+document.addEventListener("DOMContentLoaded", () => web.enable(web.supported.dark));

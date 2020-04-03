@@ -1,13 +1,11 @@
-const path = require("path");
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 module.exports = {
-    entry: "./src/modules/app/index.ts",
-    mode: "development",
-    output: {
-        path: path.join(__dirname, "dist3"),
-        filename: "[name].bundle.js",
-        chunkFilename: "[name].chunk.js"
+    entry: {
+        app: "./src/modules/app/index.ts",
     },
+    target: 'electron-renderer',
+    mode: "development",
 
     resolve: {
         extensions: [ ".js", ".ts" ]
@@ -17,17 +15,36 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                include: path.join(__dirname, "src"),
                 loader: "ts-loader"
             },
             {
                 test: /\.css$/i,
                 use: [ 'style-loader', 'css-loader' ],
-            }
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                use: [
+                  {
+                    loader: 'file-loader',
+                  },
+                ],
+              }
         ]
     },
 
     devServer: {
         contentBase: "./dist"
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            isElectron: JSON.stringify(true)
+        }),
+        new HtmlWebpackPlugin({
+            inject: false,
+            template: './src/index.html',
+            filename: 'index.html',
+
+            minify: { minifyCSS: true, minifyJS: true, removeComments: true }
+        }),
+    ]
 };
