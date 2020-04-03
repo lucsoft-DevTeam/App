@@ -1,12 +1,11 @@
-import { DataConnect, ElementResponse } from '@lucsoft/webgen';
+import { DataConnect } from '@lucsoft/webgen';
 import { CardButtonList, WebGenElements } from '@lucsoft/webgen/bin/classes/WebGenElements';
 
 import { moduleList } from '../../moduleList';
 import { actionTypes, HomeSYSAppModule } from '../../modules';
-import { page, web } from '../app';
 import { HomeSYSModule } from '../app/modules';
 
-class cardbutton
+export class cardbutton
 {
     title: string;
     value: string;
@@ -15,7 +14,7 @@ class cardbutton
     toggleElement?: (toggleState: (state: string) => void, state: HTMLSpanElement, title: HTMLSpanElement, element: HTMLElement) => void;
 };
 
-const translateENG = (trans: string) =>
+export const translateENG = (trans: string) =>
 {
     switch (trans)
     {
@@ -41,7 +40,7 @@ export class DashboardModule extends HomeSYSModule
     data?: DataConnect;
     content?: WebGenElements;
 
-    onWebGenLoaded: (page: HTMLElement) => void = (page) => (this.content = web.elements.add(page));
+    onWebGenLoaded: (page: HTMLElement) => void = (page) => (this.content = this.webgen.elements.add(page));
     onSync(type: string, data: any)
     {
         console.log("DATASYNC", type, data);
@@ -64,7 +63,7 @@ export class DashboardModule extends HomeSYSModule
                 let loadedModuleClass = await import(/* webpackChunkName: "modules" */`./submodules/${mod}/index.ts`);
                 if (loadedModuleClass.default === undefined)
                     throw new Error(mod + ' is an invalid module, kill it with fire!');
-                const newModule = new loadedModuleClass.default(web, this.content, this.data);
+                const newModule = new loadedModuleClass.default(this.webgen, this.content, this.data);
                 console.log(`Loaded ${newModule.moduleName}`);
                 this.loadedModules.push(newModule);
                 this.brodcastModuleAction("afterLoading");
@@ -74,9 +73,10 @@ export class DashboardModule extends HomeSYSModule
         this.brodcastModuleAction("afterComplete");
 
     }
-    async openDashboard(data: DataConnect)
+    
+    public async afterLogin(data: DataConnect)
     {
-        web.elements.clear();
+        this.webgen.elements.clear();
         this.data = data;
 
         await this.loadModules();
@@ -101,7 +101,7 @@ export class DashboardModule extends HomeSYSModule
                     id: "hmsysnode"
                 },
                 {
-                    title: web.functions.timeAgo(data.profile.modules.homesys.runningSince),
+                    title: this.webgen.functions.timeAgo(data.profile.modules.homesys.runningSince),
                     subtitle: "HmSYS Uptime",
                     id: "hmsysrunningsince"
                 }
@@ -117,7 +117,7 @@ export class DashboardModule extends HomeSYSModule
         this.renderButtonList(this.brodcastModuleAction("extraFeatures"));
         setInterval(() =>
         {
-            document.querySelector('#hmsysrunningsince').querySelector('.title').innerHTML = web.functions.timeAgo(data.profile.modules.homesys.runningSince);
+            document.querySelector('#hmsysrunningsince').querySelector('.title').innerHTML = this.webgen.functions.timeAgo(data.profile.modules.homesys.runningSince);
         }, 1000);
         // const list = [];
 

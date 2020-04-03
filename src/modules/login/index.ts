@@ -1,16 +1,13 @@
 import { DataConnect, IDTokenAuth, ProtocolDC } from '@lucsoft/webgen';
-
-import { page, web } from '../app';
 import { HomeSYSModule } from '../app/modules';
 
 export class LoginModule extends HomeSYSModule
 {
     moduleID: string = "@lucsoft/login";
     isLoggedIn = false;
-    data: DataConnect = new DataConnect(ProtocolDC.lsWS, web);
-    onWebGenLoaded: (page: HTMLElement) => void = (page) =>
-    {
-    }
+    data: DataConnect = new DataConnect(ProtocolDC.lsWS, this.webgen);
+    onWebGenLoaded: () => void = () => {}
+    afterLogin = async () => {};
     onLogin: (data: DataConnect) => void = () => { };
     startLogin = () =>
     {
@@ -22,8 +19,8 @@ export class LoginModule extends HomeSYSModule
             this.data.relogin(JSON.parse(localStorage.auth) as IDTokenAuth);
             return;
         }
-        web.elements.clear();
-        var test = web.elements.add(page).login({
+        this.webgen.elements.clear();
+        var test = this.webgen.elements.add(this.page).login({
             login: (password: HTMLInputElement, email: HTMLInputElement, url: HTMLInputElement, errormsg: HTMLElement) => this.data.loginWindow(password, email, { value: "wss://eu01.hmsys.de" } as HTMLInputElement, errormsg),
             email: "Email",
             password: "Password",
