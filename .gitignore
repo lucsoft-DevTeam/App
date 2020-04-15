@@ -2,5 +2,6 @@ node_modules
 node_modules/**/*
 dist
 .vscode
-HomeSYS-darwin-x64
+HomeSYS-*
 .DS_Store
+minecraft*

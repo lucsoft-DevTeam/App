@@ -1,4 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const childProcess = require('child_process');
+childProcess.exec('npm run start:client');
 const webpack = require('webpack');
 module.exports = {
     entry: {
@@ -10,7 +12,6 @@ module.exports = {
     resolve: {
         extensions: [ ".js", ".ts" ]
     },
-
     module: {
         rules: [
             {
@@ -24,11 +25,11 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
                 use: [
-                  {
-                    loader: 'file-loader',
-                  },
+                    {
+                        loader: 'file-loader',
+                    },
                 ],
-              }
+            }
         ]
     },
 

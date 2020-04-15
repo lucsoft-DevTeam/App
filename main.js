@@ -8,7 +8,8 @@ function createWindow()
         icon: __dirname + '/res/AppIcon.icns',
         title: 'HomeSYS',
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            webSecurity: false
         }
     })
     mainWindow.webContents.on('did-finish-load', () => {
