@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "@lucsoft/webgen": "^1.7.7",
-        "electron": "^8.2.0",
+        "electron": "^8.2.4",
         "extract-zip": "^2.0.0",
         "file-loader": "^6.0.0",
         "html-webpack-plugin": "^4.0.4",
