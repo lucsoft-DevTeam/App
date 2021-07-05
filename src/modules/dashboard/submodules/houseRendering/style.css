@@ -1,0 +1,52 @@
+.houseIcon {
+    font-size: 5rem;
+    display: block;
+}
+
+.houseTag {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.3);
+    font-size: 15px;
+    padding: 4px 12px 5px;
+    margin: 18px 20px;
+    border-radius: 21px;
+}
+
+.houseName {
+    display: block;
+    font-size: 2.3rem;
+    font-weight: 200;
+}
+
+.houseRending {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 1.3rem;
+}
+
+.tagsList {
+    display: block;
+    margin-top: 1rem;
+}
+
+.tagsList .tag {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.tagsList .tag::before {
+    font-size: 1.2rem;
+    margin: 0 0.2rem 0 0;
+    display: inline-block;
+}
+
+.tagsList .tag.power::before {
+    content: '⚡';
+    transform: translate(-2px);
+}
+
+.tagsList .tag.plug::before {
+    content: '🔌';
+}

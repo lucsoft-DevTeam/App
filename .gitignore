@@ -1,0 +1,7 @@
+node_modules
+node_modules/**/*
+dist
+.vscode
+HomeSYS-*
+.DS_Store
+minecraft*
